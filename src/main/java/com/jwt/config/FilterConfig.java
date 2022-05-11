@@ -10,12 +10,12 @@ import javax.servlet.Filter;
 @Configuration
 public class FilterConfig {
 
-    @Bean
-    public FilterRegistrationBean filter1() {
-        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new TestTokenFilter());
-        registrationBean.setOrder(0);
-        registrationBean.addUrlPatterns("/*");
-        return  registrationBean;
-    }
+//    @Bean
+//    public FilterRegistrationBean filter1() {
+//        FilterRegistrationBean<Filter> registrationBean = new FilterRegistrationBean<>();
+//        registrationBean.setFilter(new TestTokenFilter());
+//        registrationBean.setOrder(0);
+//        registrationBean.addUrlPatterns("/*");
+//        return  registrationBean;
+//    }
 }
