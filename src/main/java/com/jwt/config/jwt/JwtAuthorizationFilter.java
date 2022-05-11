@@ -41,12 +41,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             return;
         }
 
-        String jwtToken = header.substring(7);
+        String jwtToken = request.getHeader(JwtProperties.HEADER_STRING)
+                .replace(JwtProperties.TOKEN_PREFIX, "");
 
         // 토큰 검증 (이게 인증이기 때문에 AuthenticationManager도 필요 없음)
         // 내가 SecurityContext에 집적접근해서 세션을 만들때 자동으로 UserDetailsService에 있는 loadByUsername이 호출됨.
         String username = JWT.require(Algorithm.HMAC512(JwtProperties.SECRET)).build().verify(jwtToken)
                 .getClaim("username").asString();
+
+        log.info("[doFilterInternal] username : {}", username);
 
         if(username != null) {
             User user = userRepository.findByUsername(username);
@@ -63,5 +66,6 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             // 강제로 시큐리티의 세션에 접근하여 값 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+        chain.doFilter(request, response);
     }
 }

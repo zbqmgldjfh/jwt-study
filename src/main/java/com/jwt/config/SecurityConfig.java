@@ -24,10 +24,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //http.addFilterBefore(new TestTokenFilter(), SecurityContextPersistenceFilter.class);
-        http.csrf().disable();
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 사용하지 않겠다.
-                .and()
+        http
                 .addFilter(corsFilter) // 인증기능이 있을때는 필터에 등록시켜줘야 한다.
+                .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 사용하지 않겠다.
+                .and()
                 .formLogin().disable() // form 로그인을 하지 않겠다.
                 .httpBasic().disable() // 기본적인 http 로그인 방식을 사용하지 않는다.
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
