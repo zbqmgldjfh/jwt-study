@@ -18,29 +18,44 @@ public class RestApiController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final UserRepository userRepository;
 
-    @GetMapping("home")
+    @GetMapping("/home")
     public String home() {
         return "<h1>HOME</h1>";
     }
 
-    @PostMapping("token")
+    @PostMapping("/token")
     public String token() {
         return "<h1>token</h1>";
     }
 
+    @GetMapping("/api/v1/user")
+    public String user() {
+        return "user";
+    }
+
+    @GetMapping("/api/v1/manager")
+    public String manager() {
+        return "manager";
+    }
+
+    @GetMapping("/api/v1/admin")
+    public String admin() {
+        return "admin";
+    }
+
     // 매니저 혹은 어드민이 접근 가능
-    @GetMapping("manager/reports")
+    @GetMapping("/manager/reports")
     public String reports() {
         return "<h1>reports</h1>";
     }
 
     // 어드민이 접근 가능
-    @GetMapping("admin/users")
+    @GetMapping("/admin/users")
     public List<User> users(){
         return userRepository.findAll();
     }
 
-    @PostMapping("join")
+    @PostMapping("/join")
     public String join(@RequestBody User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRoles("ROLE_USER");

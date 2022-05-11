@@ -1,7 +1,9 @@
 package com.jwt.config;
 
 import com.jwt.config.jwt.JwtAuthenticationFilter;
+import com.jwt.config.jwt.JwtAuthorizationFilter;
 import com.jwt.filter.TestTokenFilter;
+import com.jwt.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,10 +19,11 @@ import org.springframework.web.filter.CorsFilter;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsFilter corsFilter;
+    private final UserRepository userRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.addFilterBefore(new TestTokenFilter(), SecurityContextPersistenceFilter.class);
+        //http.addFilterBefore(new TestTokenFilter(), SecurityContextPersistenceFilter.class);
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // session을 사용하지 않겠다.
                 .and()
@@ -28,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().disable() // form 로그인을 하지 않겠다.
                 .httpBasic().disable() // 기본적인 http 로그인 방식을 사용하지 않는다.
                 .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userRepository))
                 .authorizeRequests()
                 .antMatchers("/api/v1/user/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_MANAGER')")
