@@ -1,18 +1,23 @@
 package com.jwt.model;
 
+import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+@Data
 @Entity
 @NoArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue
+    @Column(name = "user_id")
     private Long id;
     private String username;
     private String password;

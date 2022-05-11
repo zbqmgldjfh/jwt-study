@@ -1,5 +1,6 @@
 package com.jwt.config;
 
+import com.jwt.config.jwt.JwtAuthenticationFilter;
 import com.jwt.filter.TestTokenFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +27,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(corsFilter) // 인증기능이 있을때는 필터에 등록시켜줘야 한다.
                 .formLogin().disable() // form 로그인을 하지 않겠다.
                 .httpBasic().disable() // 기본적인 http 로그인 방식을 사용하지 않는다.
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
                 .authorizeRequests()
                 .antMatchers("/api/v1/user/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_MANAGER')")
